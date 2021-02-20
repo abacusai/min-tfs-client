@@ -13,3 +13,6 @@ dist/
 # Minified Tensorflow / Tensor Serving Folders
 tensor_serving_client/tensorflow
 tensor_serving_client/tensorflow_serving
+tensor_serving_client/min_tfs_client/tensorflow
+tensor_serving_client/min_tfs_client/tensorflow_serving
+

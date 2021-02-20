@@ -2,7 +2,7 @@ import os
 from contextlib import contextmanager
 from distutils.cmd import Command
 from pathlib import Path
-from shutil import copy2
+from shutil import copy2, rmtree
 from subprocess import check_output
 from typing import Any, List
 
@@ -73,12 +73,42 @@ class CopyGRPCStubs(Command):
         copy2(model_service_stub, destination)
 
 
+class RestructureProtos(Command):
+    description = '''
+    Rearrange the repository and modify protobuf imports so that protobufs nested inside min_tfs_client namespace
+    '''
+    user_options: List[Any] = []
+
+    def initialize_options(self):
+        ...
+
+    def finalize_options(self):
+        ...
+
+    def run(self):
+        with cd(str(OUTPUT_PATH)):
+            # Move the protos inside of the min_tfs_client namespace
+            if os.path.isdir('min_tfs_client/tensorflow'):
+                rmtree('min_tfs_client/tensorflow')
+            os.rename('tensorflow', 'min_tfs_client/tensorflow')
+            if os.path.isdir('min_tfs_client/tensorflow_serving'):
+                rmtree('min_tfs_client/tensorflow_serving')
+            os.rename('tensorflow_serving', 'min_tfs_client/tensorflow_serving')
+        for file_path in OUTPUT_PATH.rglob('*.py'):
+            filename = str(file_path)
+            with open(filename, 'r') as f:
+                new_text = f.read().replace('from tensorflow', 'from min_tfs_client.tensorflow')
+            with open(filename, 'w') as f:
+                f.write(new_text)
+
+
 class BuildPyCommand(build_py):
     """Custom build command."""
 
     def run(self):
         self.run_command("compile_pb")
         self.run_command("copy_grpc")
+        self.run_command("restructure")
         build_py.run(self)
 
 
@@ -88,13 +118,14 @@ with open("README.md", "r") as fh:
 
 setup(
     name="min_tfs_client",
-    version="1.0.2",
+    version="1.0.2-abacus",
     description="A minified Tensor Serving Client for Python",
     long_description=long_description,
     long_description_content_type="text/markdown",
     cmdclass={
         "compile_pb": CompileProtobufs,
         "copy_grpc": CopyGRPCStubs,
+        "restructure": RestructureProtos,
         "build_py": BuildPyCommand,
     },
     package_dir={"": "tensor_serving_client"},

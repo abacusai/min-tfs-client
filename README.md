@@ -1,4 +1,6 @@
-![repo-checks](https://github.com/zendesk/min-tfs-client/workflows/repo-checks/badge.svg)
+A modified version of min-tf-client where it is in its own isolated namespace, allowing for use alongside a Tensorflow install.
+Introduces a new setup comand: `python setup.py restructure`, which mangles the imports and moves the tensorflow and tensorflow_serving protobufs inside the min_tfs_client namespace.
+
 # Minimal Tensor Serving Python Client
 A lightweight python client to communicate with Tensor Serving.
 
