@@ -2,7 +2,10 @@ from typing import NamedTuple
 
 import numpy as np
 
-from tensorflow.core.framework import types_pb2
+try:
+    from min_tfs_client.tensorflow.core.framework import types_pb2
+except TypeError:  # protobuf registration errors
+    from tensorflow.core.framework import types_pb2
 
 
 class TFType(NamedTuple):

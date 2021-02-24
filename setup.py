@@ -1,6 +1,7 @@
 import os
 from contextlib import contextmanager
 from distutils.cmd import Command
+from itertools import chain
 from pathlib import Path
 from shutil import copy2, rmtree
 from subprocess import check_output
@@ -94,7 +95,7 @@ class RestructureProtos(Command):
             if os.path.isdir('min_tfs_client/tensorflow_serving'):
                 rmtree('min_tfs_client/tensorflow_serving')
             os.rename('tensorflow_serving', 'min_tfs_client/tensorflow_serving')
-        for file_path in OUTPUT_PATH.rglob('*.py'):
+        for file_path in chain((OUTPUT_PATH / 'min_tfs_client/tensorflow').rglob('*.py'), (OUTPUT_PATH / 'min_tfs_client/tensorflow_serving').rglob('*.py')):
             filename = str(file_path)
             with open(filename, 'r') as f:
                 new_text = f.read().replace('from tensorflow', 'from min_tfs_client.tensorflow')

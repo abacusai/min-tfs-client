@@ -3,15 +3,26 @@ from typing import Any, Dict, Optional, Union
 import grpc
 import numpy as np
 
-from tensorflow_serving.apis.classification_pb2 import ClassificationRequest, ClassificationResponse
-from tensorflow_serving.apis.predict_pb2 import PredictRequest, PredictResponse
-from tensorflow_serving.apis.prediction_service_pb2_grpc import PredictionServiceStub
-from tensorflow_serving.apis.regression_pb2 import RegressionRequest, RegressionResponse
-from tensorflow_serving.apis.get_model_status_pb2 import (
-    GetModelStatusRequest,
-    GetModelStatusResponse,
-)
-from tensorflow_serving.apis.model_service_pb2_grpc import ModelServiceStub
+try:
+    from min_tfs_client.tensorflow_serving.apis.classification_pb2 import ClassificationRequest, ClassificationResponse
+    from min_tfs_client.tensorflow_serving.apis.predict_pb2 import PredictRequest, PredictResponse
+    from min_tfs_client.tensorflow_serving.apis.prediction_service_pb2_grpc import PredictionServiceStub
+    from min_tfs_client.tensorflow_serving.apis.regression_pb2 import RegressionRequest, RegressionResponse
+    from min_tfs_client.tensorflow_serving.apis.get_model_status_pb2 import (
+        GetModelStatusRequest,
+        GetModelStatusResponse,
+    )
+    from min_tfs_client.tensorflow_serving.apis.model_service_pb2_grpc import ModelServiceStub
+except TypeError:  # protobuf registration errors
+    from tensorflow_serving.apis.classification_pb2 import ClassificationRequest, ClassificationResponse
+    from tensorflow_serving.apis.predict_pb2 import PredictRequest, PredictResponse
+    from tensorflow_serving.apis.prediction_service_pb2_grpc import PredictionServiceStub
+    from tensorflow_serving.apis.regression_pb2 import RegressionRequest, RegressionResponse
+    from tensorflow_serving.apis.get_model_status_pb2 import (
+        GetModelStatusRequest,
+        GetModelStatusResponse,
+    )
+    from tensorflow_serving.apis.model_service_pb2_grpc import ModelServiceStub
 
 from .tensors import ndarray_to_tensor_proto
 

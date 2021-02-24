@@ -1,6 +1,10 @@
 from .types import DataType
-from tensorflow.core.framework.tensor_pb2 import TensorProto
-from tensorflow.core.framework.tensor_shape_pb2 import TensorShapeProto
+try:
+    from min_tfs_client.tensorflow.core.framework.tensor_pb2 import TensorProto
+    from min_tfs_client.tensorflow.core.framework.tensor_shape_pb2 import TensorShapeProto
+except TypeError:  # protobuf registration errors
+    from tensorflow.core.framework.tensor_pb2 import TensorProto
+    from tensorflow.core.framework.tensor_shape_pb2 import TensorShapeProto
 import numpy as np
 
 
