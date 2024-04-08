@@ -1,6 +1,13 @@
 A modified version of min-tf-client where it is in its own isolated namespace, allowing for use alongside a Tensorflow install.
 Introduces a new setup comand: `python setup.py restructure`, which mangles the imports and moves the tensorflow and tensorflow_serving protobufs inside the min_tfs_client namespace.
 
+Tarball created in virtual env using `build` package
+```bash
+pip install -U build
+python -m build --wheel
+```
+NOTE: Need to make sure to install all dependencies like `protoc` and `tensorflow-serving-client` since these are needed in the build process. Setup.py doesn't actually set up everything correctly, so we need to specifically run the `build --wheel` so that it inherits the working env instead of trying to create a new one.
+
 # Minimal Tensor Serving Python Client
 A lightweight python client to communicate with Tensor Serving.
 
